@@ -82,7 +82,7 @@ class FileApi(object):
         return contents
 
     def session_append_file_v2(self, session_id, data, offset = 0, close = True):
-        url = self.content_url + "files/upload_session/start"
+        url = self.content_url + "files/upload_session/append_v2"
         params = dict(
             cursor = dict(
                 session_id = session_id,
@@ -120,3 +120,19 @@ class FileApi(object):
             )
         )
         return contents
+
+    def upload_large_file(self, path, target, chunk_size = 41943040):
+        offset = 0
+        contents = self.session_start_file()
+        session_id = contents["session_id"]
+        file = open(path, "rb")
+        try:
+            while True:
+                chunk = file.read()
+                if not chunk: break
+                self.session_append_file_v2(session_id, data = chunk, offset = offset)
+                offset += len(chunk)
+        finally:
+            file.close()
+        self.session_finish_file(session_id, offset = offset, path = target)
+        return offset

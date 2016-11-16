@@ -37,6 +37,9 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
+import os
+import tempfile
+
 import appier
 
 import base
@@ -72,6 +75,18 @@ class DropboxApp(appier.WebApp):
             path = path
         )
         return contents
+
+    @appier.route("/files/large/<str:message>", "GET")
+    def file_large(self, message):
+        api = self.get_api()
+        path = self.field("path", "/hello")
+        message = appier.legacy.bytes(message)
+        fd, file_path = tempfile.mkstemp()
+        try: os.write(fd, message)
+        finally: os.close(fd)
+        try: size = api.upload_large_file(file_path, path)
+        finally: os.remove(file_path)
+        return dict(size = size)
 
     @appier.route("/folders/list", "GET")
     def folder_list(self):
