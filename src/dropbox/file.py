@@ -37,16 +37,65 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
+import json
+
 class FileApi(object):
 
     def session_start_file(self):
-        url = self.base_url + "files/upload_session/start"
-        contents = self.post(url)
-        return contents
-
-    def session_append_file_v2(self, session_id, data, offset = 0, close = True):
-        url = self.base_url + "files/upload_session/start"
+        url = self.content_url + "files/upload_session/start"
         contents = self.post(url, headers = {
             "Content-Type" : "application/octet-stream"
         })
+        return contents
+
+    def session_finish_file(
+        self,
+        session_id,
+        data = b"",
+        offset = 0,
+        path = "/file",
+        mode = "add",
+        autorename = True,
+        mute = False
+    ):
+        url = self.content_url + "files/upload_session/finish"
+        params = dict(
+            cursor = dict(
+                session_id = session_id,
+                offset = offset,
+            ),
+            commit = dict(
+                path = path,
+                mode = mode,
+                autorename = autorename,
+                mute = mute
+            )
+        )
+        contents = self.post(
+            url,
+            data = data,
+            headers = {
+                "Content-Type" : "application/octet-stream",
+                "Dropbox-API-Arg" : json.dumps(params)
+            }
+        )
+        return contents
+
+    def session_append_file_v2(self, session_id, data, offset = 0, close = True):
+        url = self.content_url + "files/upload_session/start"
+        params = dict(
+            cursor = dict(
+                session_id = session_id,
+                offset = offset,
+            ),
+            close = close
+        )
+        contents = self.post(
+            url,
+            data = data,
+            headers = {
+                "Content-Type" : "application/octet-stream",
+                "Dropbox-API-Arg" : json.dumps(params)
+            }
+        )
         return contents

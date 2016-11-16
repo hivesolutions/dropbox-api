@@ -46,6 +46,10 @@ BASE_URL = "https://api.dropboxapi.com/2/"
 """ The default base url to be used when no other
 base url value is provided to the constructor """
 
+CONTENT_URL = "https://content.dropboxapi.com/2/"
+""" The default content url to be used when no other
+base url value is provided to the constructor """
+
 ACCESS_TOKEN = None
 """ The default access token to be applied to the
 client when no other is provided """
@@ -60,6 +64,7 @@ class Api(
         appier.OAuth2Api.__init__(self, *args, **kwargs)
         self.access_token = appier.conf("DROPBOX_TOKEN", ACCESS_TOKEN)
         self.base_url = kwargs.get("base_url", BASE_URL)
+        self.content_url = kwargs.get("content_url", CONTENT_URL)
         self.access_token = kwargs.get("access_token", self.access_token)
 
     def build(
@@ -73,7 +78,7 @@ class Api(
         params = None,
         mime = None,
         kwargs = None
-    ): 
+    ):
         appier.OAuth2Api.build(
             self,
             method,

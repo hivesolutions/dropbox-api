@@ -60,39 +60,14 @@ class DropboxApp(appier.WebApp):
         account = api.self_user()
         return account
 
-    @appier.route("/files", "GET")
-    def files(self):
-        url = self.ensure_api()
-        if url: return self.redirect(url)
-        api = self.get_api()
-        contents = api.list_drive()
-        return contents
-
-    @appier.route("/files/<std:id>", "GET")
-    def file(self, id):
-        url = self.ensure_api()
-        if url: return self.redirect(url)
-        api = self.get_api()
-        contents = api.get_drive(id)
-        return contents
-
     @appier.route("/files/insert/<str:message>", "GET")
     def file_insert(self, message):
-        url = self.ensure_api()
-        if url: return self.redirect(url)
         api = self.get_api()
-        contents = api.insert_drive(
-            message,
-            content_type = "text/plain",
-            title = message
-        )
+        path = self.field("path", "/hello")
+        contents = api.session_start_file()
+        session_id = contents["session_id"]
+        contents = api.session_finish_file(session_id, data = message, path = path)
         return contents
-
-    def ensure_api(self):
-        access_token = self.session.get("gg.access_token", None)
-        if access_token: return
-        api = base.get_api()
-        return api.oauth_authorize()
 
     def get_api(self):
         api = base.get_api()
