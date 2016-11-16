@@ -93,9 +93,17 @@ class DropboxApp(appier.WebApp):
         fd, file_path = tempfile.mkstemp()
         try: os.write(fd, message)
         finally: os.close(fd)
-        try: size = api.upload_large_file(file_path, path)
+        try: contents = api.upload_large_file(file_path, path)
         finally: os.remove(file_path)
-        return dict(size = size)
+        return contents
+
+    @appier.route("/files/upload", "GET")
+    def file_upload(self):
+        api = self.get_api()
+        path = self.field("path", mandatory = True)
+        target = self.field("target", "/hello")
+        contents = api.upload_large_file(path, target)
+        return contents
 
     @appier.route("/folders/list", "GET")
     def folder_list(self):

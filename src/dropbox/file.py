@@ -81,7 +81,7 @@ class FileApi(object):
         )
         return contents
 
-    def session_append_file_v2(self, session_id, data, offset = 0, close = True):
+    def session_append_file_v2(self, session_id, data, offset = 0, close = False):
         url = self.content_url + "files/upload_session/append_v2"
         params = dict(
             cursor = dict(
