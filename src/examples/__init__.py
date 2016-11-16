@@ -19,9 +19,6 @@
 # You should have received a copy of the Apache License along with
 # Hive Dropbox API. If not, see <http://www.apache.org/licenses/>.
 
-__author__ = "João Magalhães <joamag@hive.pt>"
-""" The author(s) of the module """
-
 __version__ = "1.0.0"
 """ The version of the module """
 
@@ -37,16 +34,8 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-class FileApi(object):
+from . import app
+from . import base
 
-    def session_start_file(self):
-        url = self.base_url + "files/upload_session/start"
-        contents = self.post(url)
-        return contents
-
-    def session_append_file_v2(self, session_id, data, offset = 0, close = True):
-        url = self.base_url + "files/upload_session/start"
-        contents = self.post(url, headers = {
-            "Content-Type" : "application/octet-stream"
-        })
-        return contents
+from .app import DropboxApp
+from .base import get_api

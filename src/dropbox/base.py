@@ -40,6 +40,7 @@ __license__ = "Apache License, Version 2.0"
 import appier
 
 from . import file
+from . import account
 
 BASE_URL = "https://content.dropboxapi.com/2/"
 """ The default base url to be used when no other
@@ -51,7 +52,8 @@ client when no other is provided """
 
 class Api(
     appier.OAuth2Api,
-    file.FileApi
+    file.FileApi,
+    account.AccountApi
 ):
 
     def __init__(self, *args, **kwargs):

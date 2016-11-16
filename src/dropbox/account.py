@@ -37,16 +37,9 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-class FileApi(object):
+class AccountApi(object):
 
-    def session_start_file(self):
-        url = self.base_url + "files/upload_session/start"
-        contents = self.post(url)
-        return contents
-
-    def session_append_file_v2(self, session_id, data, offset = 0, close = True):
-        url = self.base_url + "files/upload_session/start"
-        contents = self.post(url, headers = {
-            "Content-Type" : "application/octet-stream"
-        })
+    def get_account(self, account_id):
+        url = self.base_url + "users/get_account"
+        contents = self.get(url, account_id = account_id)
         return contents
