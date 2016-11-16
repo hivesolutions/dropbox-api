@@ -99,3 +99,24 @@ class FileApi(object):
             }
         )
         return contents
+
+    def list_folder_file(
+        self,
+        path,
+        recursive = False,
+        include_media_info = False,
+        include_deleted = False,
+        include_has_explicit_shared_members = False
+    ):
+        url = self.base_url + "files/list_folder"
+        contents = self.post(
+            url,
+            data_j = dict(
+                path = path,
+                recursive = recursive,
+                include_media_info = include_media_info,
+                include_deleted = include_deleted,
+                include_has_explicit_shared_members = include_has_explicit_shared_members
+            )
+        )
+        return contents

@@ -73,6 +73,13 @@ class DropboxApp(appier.WebApp):
         )
         return contents
 
+    @appier.route("/folders/list", "GET")
+    def folder_list(self):
+        api = self.get_api()
+        path = self.field("path", "")
+        contents = api.list_folder_file(path)
+        return contents
+
     def get_api(self):
         api = base.get_api()
         return api
