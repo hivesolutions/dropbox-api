@@ -37,46 +37,41 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-import appier
+import os
+import setuptools
 
-import base
-
-class DropboxApp(appier.WebApp):
-
-    def __init__(self, *args, **kwargs):
-        appier.WebApp.__init__(
-            self,
-            name = "dropbox",
-            *args, **kwargs
-        )
-
-    @appier.route("/", "GET")
-    def index(self):
-        return self.me()
-
-    @appier.route("/me", "GET")
-    def me(self):
-        api = self.get_api()
-        account = api.self_user()
-        return account
-
-    @appier.route("/files/insert/<str:message>", "GET")
-    def file_insert(self, message):
-        api = self.get_api()
-        path = self.field("path", "/hello")
-        contents = api.session_start_file()
-        session_id = contents["session_id"]
-        contents = api.session_finish_file(
-            session_id,
-            data = message,
-            path = path
-        )
-        return contents
-
-    def get_api(self):
-        api = base.get_api()
-        return api
-
-if __name__ == "__main__":
-    app = DropboxApp()
-    app.serve()
+setuptools.setup(
+    name = "dropbox_api",
+    version = "0.1.0",
+    author = "Hive Solutions Lda.",
+    author_email = "development@hive.pt",
+    description = "Dropbox API Client",
+    license = "Apache License, Version 2.0",
+    keywords = "dropbox api",
+    url = "http://dropbox_api.hive.pt",
+    zip_safe = False,
+    packages = [
+        "dropbox"
+    ],
+    package_dir = {
+        "" : os.path.normpath("src")
+    },
+    install_requires = [
+        "appier"
+    ],
+    classifiers = [
+        "Development Status :: 3 - Alpha",
+        "Topic :: Utilities",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.0",
+        "Programming Language :: Python :: 3.1",
+        "Programming Language :: Python :: 3.2",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5"
+    ]
+)
