@@ -56,11 +56,9 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/me", "GET")
     def me(self):
-        url = self.ensure_api()
-        if url: return self.redirect(url)
         api = self.get_api()
-        user = api.self_user()
-        return user
+        account = api.self_account()
+        return account
 
     @appier.route("/files", "GET")
     def files(self):
@@ -89,40 +87,6 @@ class DropboxApp(appier.WebApp):
             title = message
         )
         return contents
-
-    @appier.route("/folders/insert/<str:title>", "GET")
-    def folder_insert(self, title):
-        url = self.ensure_api()
-        if url: return self.redirect(url)
-        api = self.get_api()
-        contents = api.folder_drive(title)
-        return contents
-
-    @appier.route("/children", "GET")
-    def children(self):
-        url = self.ensure_api()
-        if url: return self.redirect(url)
-        id = self.field("id", "root")
-        api = self.get_api()
-        contents = api.children_drive(id = id)
-        return contents
-
-    @appier.route("/oauth", "GET")
-    def oauth(self):
-        code = self.field("code")
-        api = self.get_api()
-        access_token = api.oauth_access(code)
-        self.session["gg.access_token"] = access_token
-        return self.redirect(
-            self.url_for("google.index")
-        )
-
-    @appier.exception_handler(appier.OAuthAccessError)
-    def oauth_error(self, error):
-        if "gg.access_token" in self.session: del self.session["gg.access_token"]
-        return self.redirect(
-            self.url_for("google.index")
-        )
 
     def ensure_api(self):
         access_token = self.session.get("gg.access_token", None)

@@ -39,6 +39,11 @@ __license__ = "Apache License, Version 2.0"
 
 class AccountApi(object):
 
+    def self_account(self):
+        url = self.base_url + "users/get_current_account"
+        contents = self.get(url)
+        return contents
+
     def get_account(self, account_id):
         url = self.base_url + "users/get_account"
         contents = self.get(url, account_id = account_id)
