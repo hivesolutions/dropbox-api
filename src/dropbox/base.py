@@ -40,9 +40,9 @@ __license__ = "Apache License, Version 2.0"
 import appier
 
 from . import file
-from . import account
+from . import user
 
-BASE_URL = "https://content.dropboxapi.com/2/"
+BASE_URL = "https://api.dropboxapi.com/2/"
 """ The default base url to be used when no other
 base url value is provided to the constructor """
 
@@ -53,7 +53,7 @@ client when no other is provided """
 class Api(
     appier.OAuth2Api,
     file.FileApi,
-    account.AccountApi
+    user.UserApi
 ):
 
     def __init__(self, *args, **kwargs):
@@ -62,8 +62,34 @@ class Api(
         self.base_url = kwargs.get("base_url", BASE_URL)
         self.access_token = kwargs.get("access_token", self.access_token)
 
+    def build(
+        self,
+        method,
+        url,
+        data = None,
+        data_j = None,
+        data_m = None,
+        headers = None,
+        params = None,
+        mime = None,
+        kwargs = None
+    ): 
+        appier.OAuth2Api.build(
+            self,
+            method,
+            url,
+            data = data,
+            data_j = data_j,
+            data_m = data_m,
+            headers = headers,
+            params = params,
+            mime = mime,
+            kwargs = kwargs
+        )
+        if not self.is_oauth(): return
+        kwargs.pop("access_token", True)
+
     def auth_callback(self, params, headers):
         if not self.refresh_token: return
         self.oauth_refresh()
-        params["access_token"] = self.get_access_token()
         headers["Authorization"] = "Bearer %s" % self.get_access_token()

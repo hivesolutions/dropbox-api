@@ -37,14 +37,14 @@ __copyright__ = "Copyright (c) 2008-2016 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-class AccountApi(object):
+class UserApi(object):
 
-    def self_account(self):
+    def self_user(self):
         url = self.base_url + "users/get_current_account"
-        contents = self.get(url)
+        contents = self.post(url, data_j = None)
         return contents
 
-    def get_account(self, account_id):
+    def get_user(self, account_id):
         url = self.base_url + "users/get_account"
-        contents = self.get(url, account_id = account_id)
+        contents = self.post(url, data_j = dict(account_id = account_id))
         return contents

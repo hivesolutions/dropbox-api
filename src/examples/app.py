@@ -39,7 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 import appier
 
-from . import base
+import base
 
 class DropboxApp(appier.WebApp):
 
@@ -57,7 +57,7 @@ class DropboxApp(appier.WebApp):
     @appier.route("/me", "GET")
     def me(self):
         api = self.get_api()
-        account = api.self_account()
+        account = api.self_user()
         return account
 
     @appier.route("/files", "GET")
