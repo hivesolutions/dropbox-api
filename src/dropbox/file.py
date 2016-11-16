@@ -128,11 +128,11 @@ class FileApi(object):
         file = open(path, "rb")
         try:
             while True:
-                chunk = file.read()
+                chunk = file.read(chunk_size)
                 if not chunk: break
                 self.session_append_file_v2(session_id, data = chunk, offset = offset)
                 offset += len(chunk)
         finally:
             file.close()
-        self.session_finish_file(session_id, offset = offset, path = target)
-        return offset
+        contents = self.session_finish_file(session_id, offset = offset, path = target)
+        return contents
