@@ -84,7 +84,7 @@ class DropboxApp(appier.WebApp):
     @appier.route("/files/large/<str:message>", "GET")
     def file_large(self, message):
         api = self.get_api()
-        path = self.field("path", "/hello")
+        path = self.field("path", None)
         message = appier.legacy.bytes(
             message,
             encoding = "utf-8",
@@ -93,6 +93,7 @@ class DropboxApp(appier.WebApp):
         fd, file_path = tempfile.mkstemp()
         try: os.write(fd, message)
         finally: os.close(fd)
+        path = path or "/" + os.path.basename(file_path)
         try: contents = api.upload_large_file(file_path, path)
         finally: os.remove(file_path)
         return contents
@@ -101,7 +102,8 @@ class DropboxApp(appier.WebApp):
     def file_upload(self):
         api = self.get_api()
         path = self.field("path", mandatory = True)
-        target = self.field("target", "/hello")
+        target = self.field("target", None)
+        target = target or "/" + os.path.basename(path)
         contents = api.upload_large_file(path, target)
         return contents
 
