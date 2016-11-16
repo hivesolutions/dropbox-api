@@ -67,6 +67,11 @@ class DropboxApp(appier.WebApp):
     def file_insert(self, message):
         api = self.get_api()
         path = self.field("path", "/hello")
+        message = appier.legacy.bytes(
+            message,
+            encoding = "utf-8",
+            force = True
+        )
         contents = api.session_start_file()
         session_id = contents["session_id"]
         contents = api.session_finish_file(
@@ -80,7 +85,11 @@ class DropboxApp(appier.WebApp):
     def file_large(self, message):
         api = self.get_api()
         path = self.field("path", "/hello")
-        message = appier.legacy.bytes(message)
+        message = appier.legacy.bytes(
+            message,
+            encoding = "utf-8",
+            force = True
+        )
         fd, file_path = tempfile.mkstemp()
         try: os.write(fd, message)
         finally: os.close(fd)
