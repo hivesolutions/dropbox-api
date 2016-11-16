@@ -1,0 +1,28 @@
+sudo: false
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "nightly"
+  - "pypy"
+  - "pypy3"
+install:
+  - pip install "pkginfo<1.3"
+  - pip install -r requirements.txt
+  - pip install coveralls
+  - pip install twine
+script: if [[ $TRAVIS_PYTHON_VERSION != "3.2" ]]; then coverage run --source=dropbox setup.py test; else python setup.py test; fi
+after_success: if [[ $TRAVIS_PYTHON_VERSION != "3.2" ]]; then coveralls; fi
+deploy:
+  provider: pypi
+  user: joamag
+  password:
+    secure: TLQDfiOTJcUeisB9OruZDKpZgf/vWG0TT5Pn1JmCDCPYcC7KpKvnv+mVS7rLrel0po5wqPeIkWKhgJ+lWv1Qw67hWA8fTX/W+fuiCgE6CfNwaJ2G1r3wbIACcnh/3YWoGb5+ZLCyvp2dU8poZVIoo2nlsTgrYSD97lMyrkbICp3yED5YmtF11I+EdGknkE9nce3s82Hm7ukH7yFnhaOflY33tF4dP9OSPtWtqsQ2QSWPEkNoV5YTGC5EAIRHPqm4z2u1g4B+3ZLix9Mj0Zm6PzjXGxhdnARL+TP4/gpqatLdVfTS+uDx959GmDAlbPD73qMuOimatM8+1UXb/mgXWK654v/drxUT+EeDWvK285CkZvs/Hg/g3mijsRpdQnAyyQaXFfa1CP70JEiElF2B2fPG5SwuUsydEMfddaWRgVztJLng7xcmo7SY84clHD44lGBAbWdPhofua+Ee3Ljdq/sS4D29GFGnLxTY32HZcoDuZASBJ9R2zNS61gfvvfKf6fAGKtXGdQ0SyM46OJyDiYnmxiBk+MCpUnwAbbtfaXbGA/BQ0qvq/euQ7RwyE7oAW9qdMApLtenDoPk/SvNnMVBX/2Vk6d2O52rSSOgJkWcwVbrl/DKkzdo0zQ8z+zEzE0wlCdLgFFyaGXroDH0wmoPqkh3V4P2G+LYFYvkoKao=
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    python: "2.7"
