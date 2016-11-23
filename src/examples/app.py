@@ -114,7 +114,7 @@ class DropboxApp(appier.WebApp):
         contents = api.list_folder_file(path)
         return contents
 
-    @appier.route("/link/share", "GET")
+    @appier.route("/links/share", "GET")
     def share_link(self):
         api = self.get_api()
         path = self.field("path", "/hello")
