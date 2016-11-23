@@ -41,6 +41,7 @@ import appier
 
 from . import file
 from . import user
+from . import shared_link
 
 BASE_URL = "https://api.dropboxapi.com/2/"
 """ The default base url to be used when no other
@@ -57,7 +58,8 @@ client when no other is provided """
 class Api(
     appier.OAuth2Api,
     file.FileApi,
-    user.UserApi
+    user.UserApi,
+    shared_link.SharedLinkApi
 ):
 
     def __init__(self, *args, **kwargs):
