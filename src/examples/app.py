@@ -128,3 +128,5 @@ class DropboxApp(appier.WebApp):
 if __name__ == "__main__":
     app = DropboxApp()
     app.serve()
+else:
+    __path__ = []
