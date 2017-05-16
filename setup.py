@@ -48,7 +48,7 @@ setuptools.setup(
     description = "Dropbox API Client",
     license = "Apache License, Version 2.0",
     keywords = "dropbox api",
-    url = "http://dropbox_api.hive.pt",
+    url = "http://dropbox-api.hive.pt",
     zip_safe = False,
     packages = [
         "dropbox"
