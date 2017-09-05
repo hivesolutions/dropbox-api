@@ -39,7 +39,7 @@ from . import file
 from . import shared_link
 from . import user
 
-from .base import BASE_URL, Api
-from .file import FileApi
-from .shared_link import SharedLinkApi
-from .user import UserApi
+from .base import BASE_URL, API
+from .file import FileAPI
+from .shared_link import SharedLinkAPI
+from .user import UserAPI

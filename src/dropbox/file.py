@@ -43,7 +43,7 @@ CHUNK_SIZE = 64 * 1024 * 1024
 """ The default size of the chunk of the chunk
 that is going to be used for file upload """
 
-class FileApi(object):
+class FileAPI(object):
 
     def session_start_file(self):
         url = self.content_url + "files/upload_session/start"

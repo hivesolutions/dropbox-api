@@ -42,6 +42,6 @@ import appier
 import dropbox
 
 def get_api():
-    return dropbox.Api(
+    return dropbox.API(
         access_token = appier.conf("DROPBOX_TOKEN")
     )

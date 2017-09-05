@@ -55,15 +55,15 @@ ACCESS_TOKEN = None
 """ The default access token to be applied to the
 client when no other is provided """
 
-class Api(
-    appier.OAuth2Api,
-    file.FileApi,
-    user.UserApi,
-    shared_link.SharedLinkApi
+class API(
+    appier.OAuth2API,
+    file.FileAPI,
+    user.UserAPI,
+    shared_link.SharedLinkAPI
 ):
 
     def __init__(self, *args, **kwargs):
-        appier.OAuth2Api.__init__(self, *args, **kwargs)
+        appier.OAuth2API.__init__(self, *args, **kwargs)
         self.access_token = appier.conf("DROPBOX_TOKEN", ACCESS_TOKEN)
         self.base_url = kwargs.get("base_url", BASE_URL)
         self.content_url = kwargs.get("content_url", CONTENT_URL)
@@ -81,7 +81,7 @@ class Api(
         mime = None,
         kwargs = None
     ):
-        appier.OAuth2Api.build(
+        appier.OAuth2API.build(
             self,
             method,
             url,
