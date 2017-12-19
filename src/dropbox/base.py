@@ -44,12 +44,12 @@ from . import user
 from . import shared_link
 
 BASE_URL = "https://api.dropboxapi.com/2/"
-""" The default base url to be used when no other
-base url value is provided to the constructor """
+""" The default base URL to be used when no other
+base URL value is provided to the constructor """
 
 CONTENT_URL = "https://content.dropboxapi.com/2/"
 """ The default content url to be used when no other
-base url value is provided to the constructor """
+base URL value is provided to the constructor """
 
 ACCESS_TOKEN = None
 """ The default access token to be applied to the
