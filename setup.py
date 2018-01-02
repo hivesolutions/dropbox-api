@@ -42,7 +42,7 @@ import setuptools
 
 setuptools.setup(
     name = "dropbox_api",
-    version = "0.1.7",
+    version = "0.1.8",
     author = "Hive Solutions Lda.",
     author_email = "development@hive.pt",
     description = "Dropbox API Client",
