@@ -2,6 +2,10 @@
 
 The Python Dropbox API client.
 
+## Configuration
+
+* `DROPBOX_TOKEN` (`str`) - Pre-generated OAauth access token to be used statically (defaults to `None`)
+
 ## License
 
 Dropbox API is currently licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/).
