@@ -95,8 +95,3 @@ class API(
         )
         if not self.is_oauth(): return
         kwargs.pop("access_token", True)
-
-    def auth_callback(self, params, headers):
-        if not self.refresh_token: return
-        self.oauth_refresh()
-        headers["Authorization"] = "Bearer %s" % self.get_access_token()
