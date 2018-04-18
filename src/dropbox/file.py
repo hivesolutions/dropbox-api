@@ -37,6 +37,7 @@ __copyright__ = "Copyright (c) 2008-2018 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
+import os
 import json
 
 CHUNK_SIZE = 64 * 1024 * 1024
@@ -44,6 +45,15 @@ CHUNK_SIZE = 64 * 1024 * 1024
 that is going to be used for file upload """
 
 class FileAPI(object):
+
+    @classmethod
+    def _reader_g(cls, file, amount, size = 40960):
+        yield amount
+        while amount > 0:
+            target = min(amount, size)
+            chunk = file.read(target)
+            yield chunk
+            amount -= len(chunk)
 
     def session_start_file(self):
         url = self.content_url + "files/upload_session/start"
@@ -134,20 +144,22 @@ class FileAPI(object):
         return contents
 
     def upload_large_file(self, path, target, chunk_size = CHUNK_SIZE):
+        cls = self.__class__
         offset = 0
         contents = self.session_start_file()
         session_id = contents["session_id"]
+        file_size = os.path.getsize(path)
         file = open(path, "rb")
         try:
             while True:
-                chunk = file.read(chunk_size)
-                if not chunk: break
+                if offset == file_size: break
+                amount = min(chunk_size, file_size - offset)
                 self.session_append_file_v2(
                     session_id,
-                    data = chunk,
+                    data = cls._reader_g(file, amount),
                     offset = offset
                 )
-                offset += len(chunk)
+                offset += amount
         finally:
             file.close()
         contents = self.session_finish_file(
