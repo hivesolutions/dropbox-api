@@ -42,7 +42,7 @@ import tempfile
 
 import appier
 
-import base
+from . import base
 
 class DropboxApp(appier.WebApp):
 
