@@ -128,19 +128,29 @@ class FileAPI(object):
         recursive = False,
         include_media_info = False,
         include_deleted = False,
-        include_has_explicit_shared_members = False
+        include_has_explicit_shared_members = False,
+        limit = None,
+        follow = True
     ):
         url = self.base_url + "files/list_folder"
-        contents = self.post(
-            url,
-            data_j = dict(
-                path = path,
-                recursive = recursive,
-                include_media_info = include_media_info,
-                include_deleted = include_deleted,
-                include_has_explicit_shared_members = include_has_explicit_shared_members
-            )
+        data_j = dict(
+            path = path,
+            recursive = recursive,
+            include_media_info = include_media_info,
+            include_deleted = include_deleted,
+            include_has_explicit_shared_members = include_has_explicit_shared_members
         )
+        if limit: data_j["limit"] = limit
+        contents = self.post(url, data_j = data_j)
+        contents_c = contents
+        while True:
+            has_more = contents_c.get("has_more", False)
+            cursor = contents_c.get("cursor", None)
+            if not follow: break
+            if not has_more: break
+            url = self.base_url + "files/list_folder/continue"
+            contents_c = self.post(url, data_j = dict(cursor = cursor))
+            contents["entries"] += contents_c.get("entries", [])
         return contents
 
     def upload_large_file(self, path, target, chunk_size = CHUNK_SIZE):
