@@ -4,7 +4,9 @@ The Python Dropbox API client.
 
 ## Configuration
 
-* `DROPBOX_TOKEN` (`str`) - Pre-generated OAauth access token to be used statically (defaults to `None`)
+| Name | Type | Description |
+| ----- | ----- | ----- |
+| **DROPBOX_TOKEN** | `str` | Pre-generated OAauth access token to be used statically (defaults to `None`). |
 
 ## License
 
