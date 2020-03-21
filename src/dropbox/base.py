@@ -48,7 +48,7 @@ BASE_URL = "https://api.dropboxapi.com/2/"
 base URL value is provided to the constructor """
 
 CONTENT_URL = "https://content.dropboxapi.com/2/"
-""" The default content url to be used when no other
+""" The default content URL to be used when no other
 base URL value is provided to the constructor """
 
 ACCESS_TOKEN = None
