@@ -98,6 +98,15 @@ class DropboxApp(appier.WebApp):
         finally: os.remove(file_path)
         return contents
 
+    @appier.route("/files/download", "GET")
+    def file_download(self):
+        api = self.get_api()
+        path = self.field("path", mandatory = True)
+        contents, result = api.download_file(path)
+        content_type = appier.FileTuple.guess(result["name"])
+        if content_type: self.request.set_content_type(content_type)
+        return contents
+
     @appier.route("/files/upload", "GET")
     def file_upload(self):
         api = self.get_api()

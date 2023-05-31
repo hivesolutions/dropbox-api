@@ -122,6 +122,20 @@ class FileAPI(object):
         )
         return contents
 
+    def download_file(self, path):
+        url = self.content_url + "files/download"
+        params = dict(path = path)
+        contents, response = self.post(
+            url,
+            headers = {
+                "Dropbox-API-Arg" : json.dumps(params)
+            },
+            handle = True
+        )
+        result_s = response.headers.get("Dropbox-Api-Result", "{}")
+        result = json.loads(result_s)
+        return contents, result
+
     def list_folder_file(
         self,
         path,
