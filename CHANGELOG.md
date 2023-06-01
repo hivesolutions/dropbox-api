@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Support for the `metadata_file` endpoint
+*
 
 ### Changed
 
@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 *
+
+## [0.2.1] - 2023-06-01
+
+### Added
+
+* Support for the `metadata_file` endpoint
 
 ## [0.2.0] - 2023-05-31
 
