@@ -122,6 +122,11 @@ class FileAPI(object):
         )
         return contents
 
+    def metadata_file(self, path):
+        url = self.base_url + "files/get_metadata"
+        contents = self.post(url, data_j = dict(path = path))
+        return contents
+
     def download_file(self, path):
         url = self.content_url + "files/download"
         params = dict(path = path)
