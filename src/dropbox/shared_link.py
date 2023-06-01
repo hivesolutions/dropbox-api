@@ -39,6 +39,11 @@ __license__ = "Apache License, Version 2.0"
 
 class SharedLinkAPI(object):
 
+    def list_shared_links(self, path):
+        url = self.base_url + "sharing/list_shared_links"
+        contents = self.post(url, data_j = dict(path = path))
+        return contents
+
     def create_shared_link(self, path, settings = dict()):
         url = self.base_url + "sharing/create_shared_link_with_settings"
         contents = self.post(
