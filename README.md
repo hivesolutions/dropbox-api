@@ -1,4 +1,4 @@
-# [Dropbox API](http://dropbox-api.hive.pt)
+# [Dropbox API 🐍 + 📄](http://dropbox-api.hive.pt)
 
 The Python Dropbox API client.
 
