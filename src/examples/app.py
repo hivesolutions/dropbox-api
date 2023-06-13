@@ -59,12 +59,16 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/me", "GET")
     def me(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         account = api.self_user()
         return account
 
     @appier.route("/files/insert/<str:message>", "GET")
     def file_insert(self, message):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         path = self.field("path", "/hello")
         message = appier.legacy.bytes(
@@ -83,6 +87,8 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/files/large/<str:message>", "GET")
     def file_large(self, message):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         path = self.field("path", None)
         message = appier.legacy.bytes(
@@ -100,6 +106,8 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/files/download", "GET")
     def file_download(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         path = self.field("path", mandatory = True)
         contents, result = api.download_file(path)
@@ -109,6 +117,8 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/files/upload", "GET")
     def file_upload(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         path = self.field("path", mandatory = True)
         target = self.field("target", None)
@@ -118,6 +128,8 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/folders/list", "GET")
     def folder_list(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         path = self.field("path", "")
         contents = api.list_folder_file(path)
@@ -125,6 +137,8 @@ class DropboxApp(appier.WebApp):
 
     @appier.route("/links/share", "GET")
     def link_share(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         path = self.field("path", "/hello")
         contents = api.create_shared_link(path)
@@ -145,9 +159,9 @@ class DropboxApp(appier.WebApp):
         )
         api = self.get_api()
         access_token = api.oauth_access(code)
-        self.session["gg.access_token"] = access_token
+        self.session["dropbox.access_token"] = access_token
         return self.redirect(
-            self.url_for("google.index")
+            self.url_for("dropbox.index")
         )
 
     @appier.exception_handler(appier.OAuthAccessError)

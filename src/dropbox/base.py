@@ -55,6 +55,10 @@ WEB_URL = "https://www.dropbox.com/"
 """ The default web URL to be used when no other
 web URL value is provided to the constructor """
 
+API_URL = "https://api.dropboxapi.com/"
+""" The default api URL to be used when no other
+api URL value is provided to the constructor """
+
 CLIENT_ID = None
 """ The default value to be used for the client id
 in case no client id is provided to the API client """
@@ -67,8 +71,16 @@ REDIRECT_URL = "http://localhost:8080/oauth"
 """ The redirect URL used as default (fallback) value
 in case none is provided to the API (client) """
 
+SCOPE = ()
+""" The list of permissions to be used to create the
+scope string for the OAuth value """
+
 ACCESS_TOKEN = None
 """ The default access token to be applied to the
+client when no other is provided """
+
+REFRESH_TOKEN = None
+""" The default refresh token to be applied to the
 client when no other is provided """
 
 class API(
@@ -85,13 +97,17 @@ class API(
         self.client_secret = appier.conf("DROPBOX_SECRET", CLIENT_SECRET)
         self.redirect_url = appier.conf("DROPBOX_REDIRECT_URL", REDIRECT_URL)
         self.access_token = appier.conf("DROPBOX_TOKEN", ACCESS_TOKEN)
+        self.refresh_token = appier.conf("DROPBOX_REFRESH", REFRESH_TOKEN)
         self.base_url = kwargs.get("base_url", BASE_URL)
         self.content_url = kwargs.get("content_url", CONTENT_URL)
         self.web_url = kwargs.get("web_url", WEB_URL)
+        self.api_url = kwargs.get("api_url", API_URL)
         self.client_id = kwargs.get("client_id", self.client_id)
         self.client_secret = kwargs.get("client_secret", self.client_secret)
         self.redirect_url = kwargs.get("redirect_url", self.redirect_url)
+        self.scope = kwargs.get("scope", SCOPE)
         self.access_token = kwargs.get("access_token", self.access_token)
+        self.refresh_token = kwargs.get("refresh_token", self.refresh_token)
 
     def build(
         self,
@@ -136,13 +152,13 @@ class API(
         )
         if state: values["state"] = state
         if token_access_type: values["token_access_type"] = token_access_type
-        if prompt: values["prompt"] = "force"
+        if not prompt: values["prompt"] = "none"
         data = appier.legacy.urlencode(values)
         url = url + "?" + data
         return url
 
     def oauth_access(self, code):
-        url = self.BASE_URL + "oauth2/token"
+        url = self.api_url + "oauth2/token"
         contents = self.post(
             url,
             token = False,
@@ -159,7 +175,7 @@ class API(
         return self.access_token
 
     def oauth_refresh(self):
-        url = self.login_url + "oauth2/token"
+        url = self.api_url + "oauth2/token"
         contents = self.post(
             url,
             callback = False,
