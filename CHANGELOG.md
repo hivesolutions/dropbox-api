@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-*
+* Small issue with the refresh token operation
 
 ## [0.2.3] - 2023-06-13
 

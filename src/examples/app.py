@@ -160,6 +160,7 @@ class DropboxApp(appier.WebApp):
         api = self.get_api()
         access_token = api.oauth_access(code)
         self.session["dropbox.access_token"] = access_token
+        self.session["dropbox.refresh_token"] = api.refresh_token
         return self.redirect(
             self.url_for("dropbox.index")
         )
@@ -167,22 +168,26 @@ class DropboxApp(appier.WebApp):
     @appier.exception_handler(appier.OAuthAccessError)
     def oauth_error(self, error):
         if "dropbox.access_token" in self.session: del self.session["dropbox.access_token"]
+        if "dropbox.refresh_token" in self.session: del self.session["dropbox.refresh_token"]
         return self.redirect(
             self.url_for("dropbox.index")
         )
 
     def ensure_api(self):
-        access_token = self.session.get("dropbox.access_token", None)
-        access_token = appier.conf("DROPBOX_TOKEN", access_token)
+        access_token = appier.conf("DROPBOX_TOKEN", None)
+        access_token = self.session.get("dropbox.access_token", access_token)
         if access_token: return
         api = base.get_api()
         return api.oauth_authorize()
 
     def get_api(self):
-        access_token = self.session and self.session.get("dropbox.access_token", None)
-        access_token = appier.conf("DROPBOX_TOKEN", access_token)
+        access_token = appier.conf("DROPBOX_TOKEN", None)
+        refresh_token = appier.conf("DROPBOX_REFRESH", None)
+        access_token = self.session and self.session.get("dropbox.access_token", access_token)
+        refresh_token = self.session and self.session.get("dropbox.refresh_token", refresh_token)
         api = base.get_api()
         api.access_token = access_token
+        if refresh_token: api.refresh_token = refresh_token
         return api
 
 if __name__ == "__main__":

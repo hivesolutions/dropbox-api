@@ -183,7 +183,6 @@ class API(
             client_id = self.client_id,
             client_secret = self.client_secret,
             grant_type = "refresh_token",
-            redirect_uri = self.redirect_url,
             refresh_token = self.refresh_token
         )
         self.access_token = contents["access_token"]
