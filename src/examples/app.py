@@ -172,15 +172,15 @@ class DropboxApp(appier.WebApp):
         )
 
     def ensure_api(self):
-        access_token = appier.conf("DROPBOX_TOKEN")
-        access_token = self.session.get("dropbox.access_token", access_token)
+        access_token = self.session.get("dropbox.access_token", None)
+        access_token = appier.conf("DROPBOX_TOKEN", access_token)
         if access_token: return
         api = base.get_api()
         return api.oauth_authorize()
 
     def get_api(self):
-        access_token = appier.conf("DROPBOX_TOKEN")
-        access_token = self.session and self.session.get("dropbox.access_token", access_token)
+        access_token = self.session and self.session.get("dropbox.access_token", None)
+        access_token = appier.conf("DROPBOX_TOKEN", access_token)
         api = base.get_api()
         api.access_token = access_token
         return api
