@@ -37,11 +37,7 @@ __copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-import appier
-
 import dropbox
 
 def get_api():
-    return dropbox.API(
-        access_token = appier.conf("DROPBOX_TOKEN")
-    )
+    return dropbox.API()

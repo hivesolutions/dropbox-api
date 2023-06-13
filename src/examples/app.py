@@ -130,8 +130,45 @@ class DropboxApp(appier.WebApp):
         contents = api.create_shared_link(path)
         return contents
 
-    def get_api(self):
+    @appier.route("/logout", "GET")
+    def logout(self):
+        return self.oauth_error(None)
+
+    @appier.route("/oauth", "GET")
+    def oauth(self):
+        code = self.field("code")
+        error = self.field("error")
+        appier.verify(
+            not error,
+            message = "Invalid OAuth response (%s)" % error,
+            exception = appier.OperationalError
+        )
+        api = self.get_api()
+        access_token = api.oauth_access(code)
+        self.session["gg.access_token"] = access_token
+        return self.redirect(
+            self.url_for("google.index")
+        )
+
+    @appier.exception_handler(appier.OAuthAccessError)
+    def oauth_error(self, error):
+        if "dropbox.access_token" in self.session: del self.session["dropbox.access_token"]
+        return self.redirect(
+            self.url_for("dropbox.index")
+        )
+
+    def ensure_api(self):
+        access_token = appier.conf("DROPBOX_TOKEN")
+        access_token = self.session.get("dropbox.access_token", access_token)
+        if access_token: return
         api = base.get_api()
+        return api.oauth_authorize()
+
+    def get_api(self):
+        access_token = appier.conf("DROPBOX_TOKEN")
+        access_token = self.session and self.session.get("dropbox.access_token", access_token)
+        api = base.get_api()
+        api.access_token = access_token
         return api
 
 if __name__ == "__main__":
