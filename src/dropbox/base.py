@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Dropbox API
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2024 Hive Solutions Lda.
 #
 # This file is part of Hive Dropbox API.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2024 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -83,12 +74,8 @@ REFRESH_TOKEN = None
 """ The default refresh token to be applied to the
 client when no other is provided """
 
-class API(
-    appier.OAuth2API,
-    file.FileAPI,
-    user.UserAPI,
-    shared_link.SharedLinkAPI
-):
+
+class API(appier.OAuth2API, file.FileAPI, user.UserAPI, shared_link.SharedLinkAPI):
 
     def __init__(self, *args, **kwargs):
         appier.OAuth2API.__init__(self, *args, **kwargs)
@@ -113,46 +100,51 @@ class API(
         self,
         method,
         url,
-        data = None,
-        data_j = None,
-        data_m = None,
-        headers = None,
-        params = None,
-        mime = None,
-        kwargs = None
+        data=None,
+        data_j=None,
+        data_m=None,
+        headers=None,
+        params=None,
+        mime=None,
+        kwargs=None,
     ):
         appier.OAuth2API.build(
             self,
             method,
             url,
-            data = data,
-            data_j = data_j,
-            data_m = data_m,
-            headers = headers,
-            params = params,
-            mime = mime,
-            kwargs = kwargs
+            data=data,
+            data_j=data_j,
+            data_m=data_m,
+            headers=headers,
+            params=params,
+            mime=mime,
+            kwargs=kwargs,
         )
-        if not self.is_oauth(): return
+        if not self.is_oauth():
+            return
         kwargs.pop("access_token", True)
 
     def auth_callback(self, params, headers):
-        if not self.refresh_token: return
+        if not self.refresh_token:
+            return
         self.oauth_refresh()
         params["access_token"] = self.get_access_token()
         headers["Authorization"] = "Bearer %s" % self.get_access_token()
 
-    def oauth_authorize(self, state = None, token_access_type = "offline", prompt = True):
+    def oauth_authorize(self, state=None, token_access_type="offline", prompt=True):
         url = self.web_url + "oauth2/authorize"
         values = dict(
-            client_id = self.client_id,
-            redirect_uri = self.redirect_url,
-            response_type = "code",
-            scope = " ".join(self.scope)
+            client_id=self.client_id,
+            redirect_uri=self.redirect_url,
+            response_type="code",
+            scope=" ".join(self.scope),
         )
-        if state: values["state"] = state
-        if token_access_type: values["token_access_type"] = token_access_type
-        if not prompt: values["prompt"] = "none"
+        if state:
+            values["state"] = state
+        if token_access_type:
+            values["token_access_type"] = token_access_type
+        if not prompt:
+            values["prompt"] = "none"
         data = appier.legacy.urlencode(values)
         url = url + "?" + data
         return url
@@ -161,12 +153,12 @@ class API(
         url = self.api_url + "oauth2/token"
         contents = self.post(
             url,
-            token = False,
-            client_id = self.client_id,
-            client_secret = self.client_secret,
-            grant_type = "authorization_code",
-            redirect_uri = self.redirect_url,
-            code = code
+            token=False,
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            grant_type="authorization_code",
+            redirect_uri=self.redirect_url,
+            code=code,
         )
         self.access_token = contents["access_token"]
         self.refresh_token = contents.get("refresh_token", None)
@@ -178,12 +170,12 @@ class API(
         url = self.api_url + "oauth2/token"
         contents = self.post(
             url,
-            callback = False,
-            token = False,
-            client_id = self.client_id,
-            client_secret = self.client_secret,
-            grant_type = "refresh_token",
-            refresh_token = self.refresh_token
+            callback=False,
+            token=False,
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            grant_type="refresh_token",
+            refresh_token=self.refresh_token,
         )
         self.access_token = contents["access_token"]
         self.trigger("access_token", self.access_token)
