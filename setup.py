@@ -42,6 +42,7 @@ setuptools.setup(
     url="http://dropbox-api.hive.pt",
     zip_safe=False,
     packages=["dropbox"],
+    test_suite="dropbox.test",
     package_dir={"": os.path.normpath("src")},
     install_requires=["appier"],
     classifiers=[

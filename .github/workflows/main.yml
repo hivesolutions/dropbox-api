@@ -31,7 +31,7 @@ jobs:
       - run: |
           pip install pytest
           pytest
-      - run: pypy setup.py test
+      - run: python setup.py test
         if: matrix.python-version != '3.12' && matrix.python-version != 'latest'
   build-pypy:
     name: Build PyPy
