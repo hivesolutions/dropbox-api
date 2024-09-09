@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-*
+* Issue related to old way of passing `oauth_token` to the client
 
 ## [0.2.4] - 2023-06-13
 
