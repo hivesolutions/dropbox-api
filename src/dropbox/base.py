@@ -128,7 +128,6 @@ class API(appier.OAuth2API, file.FileAPI, user.UserAPI, shared_link.SharedLinkAP
         if not self.refresh_token:
             return
         self.oauth_refresh()
-        params["access_token"] = self.get_access_token()
         headers["Authorization"] = "Bearer %s" % self.get_access_token()
 
     def oauth_authorize(self, state=None, token_access_type="offline", prompt=True):
