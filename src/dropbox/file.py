@@ -31,6 +31,8 @@ __license__ = "Apache License, Version 2.0"
 import os
 import json
 
+import appier
+
 CHUNK_SIZE = 64 * 1024 * 1024
 """ The default size of the chunk of the chunk
 that is going to be used for file upload """
@@ -156,8 +158,15 @@ class FileAPI(object):
         offset = 0
         contents = self.session_start_file()
         session_id = contents["session_id"]
-        file_size = os.path.getsize(path)
-        file = open(path, "rb")
+        is_path = appier.legacy.is_string(path)
+        if is_path:
+            file = open(path, "rb")
+        else:
+            file = path
+        position = file.tell()
+        file.seek(0, os.SEEK_END)
+        file_size = file.tell()
+        file.seek(0)
         try:
             while True:
                 if offset == file_size:
@@ -168,6 +177,8 @@ class FileAPI(object):
                 )
                 offset += amount
         finally:
-            file.close()
+            file.seek(position)
+            if is_path:
+                file.close()
         contents = self.session_finish_file(session_id, offset=offset, path=target)
         return contents
